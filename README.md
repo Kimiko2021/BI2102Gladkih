@@ -13,4 +13,4 @@
   <li>Бизнес-информатика</li>
 </ol>
 
-<image src="/8784104.png">
+<image src="/1.jpg">
