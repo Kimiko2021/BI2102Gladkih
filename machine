@@ -1,0 +1,48 @@
+import 'ICoffee.dart';
+import 'AsyncProcess.dart';
+
+class Machine {
+  double _coffeeBeans = 500;
+  double _milk = 1000;
+  double _water = 2000;
+  double _cash = 0;
+
+  double get coffeeBeans => _coffeeBeans;
+  double get milk => _milk;
+  double get water => _water;
+  double get cash => _cash;
+
+  set coffeeBeans(double value) => _coffeeBeans = value;
+  set milk(double value) => _milk = value;
+  set water(double value) => _water = value;
+  set cash(double value) => _cash = value;
+
+  bool isAvailable(ICoffee coffee) {
+    final res = coffee.resources;
+    return _coffeeBeans >= res.coffeeBeans &&
+        _milk >= res.milk &&
+        _water >= res.water;
+  }
+
+  void resetCash() {
+    _cash = 0;
+  }
+
+  Future<String> makeCoffee(ICoffee coffee) async {
+    if (!isAvailable(coffee)) {
+      return 'Недостаточно ресурсов для ${coffee.name}.';
+    }
+
+    final res = coffee.resources;
+    _coffeeBeans -= res.coffeeBeans;
+    _milk -= res.milk;
+    _water -= res.water;
+    _cash += coffee.price;
+
+    print('--- Начало приготовления: ${coffee.name} ---');
+    await AsyncProcess.prepareCoffee(needsMilk: res.milk > 0);
+    print('--- Завершено приготовление: ${coffee.name} ---');
+
+    return '${coffee.name} подан!';
+  }
+}
